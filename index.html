@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR: Eslam Soud 2027</title>
+    
+    <script>
+        // Override appendChild BEFORE Tailwind CDN loads to block badge
+        (function() {
+            var orig = Element.prototype.appendChild;
+            Element.prototype.appendChild = function(child) {
+                if (child && child.nodeType === 1) {
+                    var tag = child.tagName;
+                    var txt = (child.innerText || child.textContent || '').trim();
+                    var sty = child.getAttribute('style') || '';
+                    // Block Tailwind badge: <a> with fixed positioning and short numeric text
+                    if (tag === 'A' && sty.indexOf('fixed') !== -1 && txt.length < 10 && /\d/.test(txt)) {
+                        return child;
+                    }
+                }
+                return orig.call(this, child);
+            };
+        })();
+    </script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e3a8a',
+                        secondary: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 for nice alerts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- dom-to-image for high quality card download with proper RTL support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-image: url('af28c201-5b4e-4a9f-a465-8984205cc6b3.png');
+            background-color: #f3f4f6;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .bg-overlay {
+            background: linear-gradient(135deg, rgba(30,58,138,0.85) 0%, rgba(21,41,102,0.9) 100%);
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            box-shadow: 0 8px 32px rgba(30,58,138,0.15), 0 0 60px rgba(255,215,0,0.05);
+        }
+
+        /* ===== Fade & Slide Animations ===== */
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.7s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+
+        /* ===== Icon Glow & Float ===== */
+        .icon-glow {
+            animation: iconFloat 3s ease-in-out infinite, iconGlow 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(30,58,138,0.4));
+        }
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes iconGlow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(30,58,138,0.4)); }
+            50% { filter: drop-shadow(0 0 25px rgba(255,215,0,0.6)); }
+        }
+
+        /* ===== Title Gradient Text ===== */
+        .title-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #FFD700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 3s ease-in-out infinite;
+        }
+        @keyframes titleShimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        /* ===== Highlight Box ===== */
+        .highlight-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            border: 2px solid transparent;
+            border-image: linear-gradient(135deg, #FFD700, #1e3a8a) 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* ===== Pulse CTA ===== */
+        .pulse-cta {
+            animation: pulseCta 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(30,58,138,0.3);
+        }
+        @keyframes pulseCta {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.02); opacity: 0.9; }
+        }
+
+        /* ===== Button Styles ===== */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .btn-primary-custom::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary-custom:hover::before {
+            left: 100%;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(30,58,138,0.4), 0 0 20px rgba(255,215,0,0.2);
+        }
+        .btn-primary-custom:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .btn-gold-custom {
+            background: linear-gradient(135deg, #FFD700 0%, #f59e0b 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .btn-gold-custom::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .btn-gold-custom:hover::before {
+            left: 100%;
+        }
+        .btn-gold-custom:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.4), 0 0 20px rgba(30,58,138,0.15);
+        }
+
+        .btn-outline-custom {
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #1e3a8a;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .btn-outline-custom:hover {
+            background: #1e3a8a;
+            color: white;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(30,58,138,0.3);
+        }
+
+        /* ===== Input Focus Glow ===== */
+        .input-modern {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+        .input-modern:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 4px rgba(30,58,138,0.1), 0 0 20px rgba(30,58,138,0.1);
+            transform: translateY(-1px);
+        }
+        .input-whatsapp:focus {
+            border-color: #25d366;
+            box-shadow: 0 0 0 4px rgba(37,211,102,0.1), 0 0 20px rgba(37,211,102,0.1);
+        }
+
+        /* ===== Success Highlight ===== */
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .success-highlight {
+            animation: pulse-border 2s infinite;
+        }
+
+        /* ===== Confetti for Success ===== */
+        .confetti-bg {
+            position: relative;
+            overflow: hidden;
+        }
+        .confetti-bg::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 60%);
+            animation: confettiSpin 10s linear infinite;
+        }
+        @keyframes confettiSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== Header Gradient ===== */
+        .header-gradient {
+            background: linear-gradient(135deg, #1e3a8a 0%, #152966 50%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .header-gradient::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 100%; height: 200%;
+            background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, transparent 50%);
+            animation: headerGlow 4s ease-in-out infinite;
+        }
+        @keyframes headerGlow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* ===== Card Hover Lift ===== */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30,58,138,0.2);
+        }
+
+        /* ===== Star Decoration ===== */
+        .star-decoration::before {
+            content: '';
+            position: absolute;
+            top: -10px; right: -10px;
+            font-size: 24px;
+            animation: starTwinkle 1.5s ease-in-out infinite;
+        }
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.7; transform: scale(1.2) rotate(15deg); }
+        }
+
+        /* ===== Smooth Scroll ===== */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ===== Mobile Optimizations ===== */
+        @media (max-width: 640px) {
+            .glass-panel {
+                margin: 0 8px;
+                border-radius: 16px;
+            }
+            .btn-primary-custom, .btn-gold-custom, .btn-outline-custom {
+                min-height: 48px;
+            }
+            .input-modern {
+                min-height: 48px;
+                font-size: 16px;
+            }
+        }
+
+
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 flex flex-col relative overflow-x-hidden">
+    <div class="bg-overlay"></div>
+
+    <header class="w-full header-gradient text-white py-5 md:py-8 shadow-2xl relative z-10">
+        <div class="container mx-auto px-4 flex flex-col items-center relative z-10">
+            <h1 class="text-2xl md:text-4xl font-black mb-2 text-center drop-shadow-lg fade-in-up" style="text-shadow: 0 2px 10px rgba(0,0,0,0.3);">الأستاذ / إسلام سعود</h1>
+            <p class="text-secondary font-bold text-base md:text-xl tracking-wider drop-shadow-sm fade-in-up delay-1" style="text-shadow: 0 1px 8px rgba(255,215,0,0.3);">تسجيل العام الدراسي 2026-2027</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12 flex-grow flex flex-col items-center justify-center relative z-10 w-full max-w-4xl">
+        
+        <!-- Welcome Section -->
+        <section id="welcome-section" class="w-full glass-panel rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-6 text-center fade-in">
+            <!-- Animated Rocket Icon - Centered -->
+            <div class="mb-2 flex justify-center fade-in-up delay-1">
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-primary/20 to-secondary/20 p-3 md:p-4 rounded-full icon-glow">
+                        <i class="fas fa-rocket text-2xl md:text-4xl text-primary"></i>
+                    </div>
+                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full flex items-center justify-center animate-bounce">
+                        <i class="fas fa-star text-[8px] text-white"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Title - Centered under icon -->
+            <h2 class="text-lg sm:text-xl md:text-3xl font-black mb-2 title-gradient fade-in-up delay-2">أهلاً بكم في بداية رحلة جديدة!</h2>
+
+            <!-- Welcome Paragraph - directly under icon -->
+            <p class="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed mb-3 font-semibold fade-in-up delay-3 px-2">
+                <span class="block text-base sm:text-lg md:text-xl font-black text-primary mb-1">طلابي الأعزاء، صناع المستقبل وأبطال الغد.</span>
+                <span class="block">عام دراسي جديد يطرق الأبواب، ومعه نجدد الشغف، ونرسم أهدافاً جديدة لنحققها معاً.</span>
+                <span class="block mt-1">ونحن نستعد لهذه الانطلاقة، نؤكد لكم على ثوابتنا التي لا نحيد عنها:</span>
+            </p>
+
+            <!-- Principles Cards -->
+            <div class="highlight-box rounded-xl p-3 md:p-4 mb-3 text-right fade-in-up delay-4">
+                <ul class="space-y-2 md:space-y-2">
+                    <li class="flex items-start gap-3 group">
+                        <div class="bg-gradient-to-br from-secondary to-yellow-500 p-2 rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                            <i class="fas fa-sync-alt text-white text-sm md:text-base"></i>
+                        </div>
+                        <span class="text-gray-800 font-bold text-sm md:text-lg leading-relaxed"><span class="text-primary font-black">سياستنا:</span> تحديث وتطوير مستمر.</span>
+                    </li>
+                    <li class="flex items-start gap-3 group">
+                        <div class="bg-gradient-to-br from-primary to-blue-700 p-2 rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                            <i class="fas fa-trophy text-white text-sm md:text-base"></i>
+                        </div>
+                        <span class="text-gray-800 font-bold text-sm md:text-lg leading-relaxed"><span class="text-primary font-black">هدفنا:</span> تفوق وليس مجرد نجاح.</span>
+                    </li>
+                    <li class="flex items-start gap-3 group">
+                        <div class="bg-gradient-to-br from-secondary to-yellow-500 p-2 rounded-lg shadow-md group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                            <i class="fas fa-star text-white text-sm md:text-base"></i>
+                        </div>
+                        <span class="text-gray-800 font-bold text-sm md:text-lg leading-relaxed"><span class="text-primary font-black">شعارنا:</span> معاً دائماً في المقدمة.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CTA Question -->
+            <div class="mb-2 fade-in-up delay-5">
+                <p class="text-primary text-base sm:text-lg md:text-xl font-black mb-1 text-center leading-relaxed pulse-cta relative">
+                    <span class="relative z-10">هل أنتم مستعدون للانطلاق نحو التفوق؟</span>
+                </p>
+            </div>
+
+            <!-- Success Message -->
+            <div class="mb-4 fade-in-up delay-6">
+                <p class="text-gray-600 text-sm sm:text-base md:text-lg font-bold text-center leading-relaxed relative star-decoration">
+                    <span class="bg-gradient-to-r from-primary via-blue-600 to-primary bg-clip-text text-transparent">بانتظاركم لنصنع معاً قصة نجاح جديدة!</span>
+                    <span class="text-xl md:text-2xl mr-2 inline-block animate-bounce">&#10024;</span>
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 w-full max-w-lg mx-auto fade-in-up delay-6">
+                <button onclick="startRegistration()" class="btn-primary-custom text-white font-bold py-3 md:py-3 px-6 md:px-8 rounded-xl shadow-lg flex items-center justify-center gap-3 text-base md:text-lg w-full md:w-auto flex-1">
+                    <i class="fas fa-user-plus text-lg"></i>
+                    <span>حجز جديد</span>
+                </button>
+                <button onclick="openLoginSection()" class="btn-outline-custom text-primary font-bold py-3 md:py-3 px-6 md:px-8 rounded-xl shadow-lg flex items-center justify-center gap-3 text-base md:text-lg w-full md:w-auto flex-1">
+                    <i class="fas fa-edit text-lg"></i>
+                    <span>تعديل / إلغاء الحجز</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Login Section (For Edit) -->
+        <section id="login-section" class="hidden w-full max-w-md glass-panel rounded-2xl md:rounded-3xl shadow-2xl p-5 md:p-8 fade-in">
+            <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
+                <h2 class="text-lg md:text-xl font-bold text-primary flex items-center gap-2">
+                    <div class="bg-primary/10 p-2 rounded-lg">
+                        <i class="fas fa-search text-primary"></i>
+                    </div>
+                    البحث عن بياناتك
+                </h2>
+                <button onclick="backToWelcome()" class="text-gray-400 hover:text-primary transition p-2 rounded-full hover:bg-gray-100">
+                    <i class="fas fa-times text-lg"></i>
+                </button>
+            </div>
+            
+            <p class="text-xs md:text-sm text-gray-500 mb-6 font-semibold text-center bg-gray-50 p-3 rounded-lg">أدخل رقم الحجز (ID) ورقم الهاتف الذي قمت بالتسجيل به للوصول إلى بياناتك وتعديلها.</p>
+
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm">رقم الحجز (ID)</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-primary"><i class="fas fa-hashtag"></i></span>
+                        <input type="number" id="loginId" required class="input-modern w-full pl-4 pr-10 py-3 rounded-xl text-base" placeholder="مثال: 12345" dir="ltr">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm">رقم هاتف ولي الأمر</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-primary"><i class="fas fa-phone"></i></span>
+                        <input type="tel" id="loginPhone" required pattern="[0-9]{11}" class="input-modern w-full pl-4 pr-10 py-3 rounded-xl text-base" placeholder="مثال: 01012345678" dir="ltr">
+                    </div>
+                </div>
+                <button type="submit" id="loginBtn" class="btn-gold-custom w-full text-gray-900 font-bold py-3 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 mt-4">
+                    <i class="fas fa-search"></i>
+                    <span>بحث عن البيانات</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Form Section -->
+        <section id="form-section" class="hidden w-full max-w-2xl glass-panel rounded-2xl md:rounded-3xl shadow-2xl p-5 md:p-8 fade-in">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-200 pb-4">
+                <h2 id="formTitle" class="text-lg md:text-xl font-bold text-primary flex items-center gap-2">
+                    <div class="bg-primary/10 p-2 rounded-lg">
+                        <i class="fas fa-user-plus text-primary"></i>
+                    </div>
+                    بيانات الطالب
+                </h2>
+                <button onclick="backToWelcome()" class="text-gray-400 hover:text-primary transition flex items-center gap-1 text-xs font-semibold bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg">
+                    <i class="fas fa-arrow-right"></i>
+                    عودة
+                </button>
+            </div>
+            
+            <!-- Reservation Status Indicator (hidden by default) -->
+            <div id="reservationStatus" class="hidden mb-4 p-3 rounded-xl text-center text-sm font-bold">
+                <i class="fas fa-info-circle ml-1"></i>
+                <span id="reservationStatusText"></span>
+            </div>
+            
+            <form id="registrationForm" class="space-y-4 md:space-y-5">
+                <input type="hidden" id="scriptUrl" value="https://script.google.com/macros/s/AKfycbxthSLS5ZCvFRdP2Z8lVNUeCNmhDVPYXV8rf1ZN3-hfNdaO-QhLTqjtP54K_w6U5-VL/exec">
+                <input type="hidden" id="editIdValue" value="">
+                
+                <!-- Name -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm" for="studentName">اسم الطالب رباعي <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-primary"><i class="fas fa-user"></i></span>
+                        <input type="text" id="studentName" required
+                            class="input-modern w-full pl-4 pr-10 py-3 rounded-xl text-base"
+                            placeholder="اكتب اسمك بالكامل">
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm" for="parentPhone">رقم هاتف ولي الأمر (عليه واتساب) <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-green-500"><i class="fab fa-whatsapp text-lg"></i></span>
+                        <input type="tel" id="parentPhone" required pattern="[0-9]{11}" maxlength="11" oninput="convertArabicNumerals(this)"
+                            class="input-modern input-whatsapp w-full pl-4 pr-10 py-3 rounded-xl text-base"
+                            placeholder="مثال: 01012345678" dir="ltr">
+                    </div>
+                </div>
+
+                <!-- Gender & Grade -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2 text-sm" for="gender">النوع <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-primary"><i class="fas fa-venus-mars"></i></span>
+                            <select id="gender" required onchange="updateGroups()"
+                                class="input-modern w-full pl-4 pr-10 py-3 rounded-xl appearance-none bg-white text-base">
+                                <option value="" disabled selected>اختر النوع...</option>
+                                <option value="بنين">بنين</option>
+                                <option value="بنات">بنات</option>
+                            </select>
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"><i class="fas fa-chevron-down text-sm"></i></span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2 text-sm" for="grade">المرحلة الدراسية <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-primary"><i class="fas fa-graduation-cap"></i></span>
+                            <select id="grade" required onchange="updateGroups()"
+                                class="input-modern w-full pl-4 pr-10 py-3 rounded-xl appearance-none bg-white text-base">
+                                <option value="" disabled selected>اختر المرحلة...</option>
+                                <option value="الأول الإعدادي">الصف الأول الإعدادي</option>
+                                <option value="الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                                <option value="الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                                <option value="الأول الثانوي">الصف الأول الثانوي</option>
+                                <option value="الثاني الثانوي (بكالوريا)">الصف الثاني الثانوي (بكالوريا)</option>
+                            </select>
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"><i class="fas fa-chevron-down text-sm"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm" for="group">المجموعة (الميعاد) <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-primary"><i class="fas fa-clock"></i></span>
+                        <select id="group" required disabled
+                            class="input-modern w-full pl-4 pr-10 py-3 rounded-xl appearance-none bg-gray-50 text-gray-400 text-base">
+                            <option value="" disabled selected>يرجى اختيار المرحلة أولاً...</option>
+                        </select>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"><i class="fas fa-chevron-down text-sm"></i></span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-4 flex flex-col gap-3">
+                    <button type="submit" id="submitBtn" class="btn-primary-custom text-white font-bold py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 text-base md:text-lg">
+                        <i class="fas fa-paper-plane"></i>
+                        <span id="submitBtnText">تأكيد الحجز وتوليد الكارت</span>
+                    </button>
+                    
+                    <button type="button" id="cancelReservationBtn" onclick="cancelReservation()" class="hidden w-full bg-red-50 hover:bg-red-100 text-red-600 border-2 border-red-200 font-bold py-3 px-6 rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>إلغاء هذا الحجز نهائياً</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Success Section -->
+        <section id="success-section" class="hidden fade-in w-full flex flex-col items-center">
+            
+            <!-- Success Message -->
+            <div class="mb-6 w-full max-w-2xl bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden success-highlight fade-in-up">
+                <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-6 md:p-8 text-center relative overflow-hidden confetti-bg">
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 md:w-20 md:h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 icon-glow">
+                            <i class="fas fa-check-circle text-4xl md:text-5xl"></i>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-black mb-2 drop-shadow-lg">تم حفظ البيانات بنجاح!</h2>
+                        <p class="text-base md:text-lg font-bold opacity-90">مرحباً بك في أسرة التفوق مع أ. إسلام سعود</p>
+                    </div>
+                </div>
+                <div class="p-5 md:p-8 text-center bg-gradient-to-b from-green-50 to-white relative">
+                    <h3 class="text-lg md:text-xl font-black text-red-600 mb-4 flex items-center justify-center gap-2">
+                        <i class="fas fa-exclamation-triangle animate-pulse text-xl"></i>
+                        خطوة هامة جداً!
+                    </h3>
+                    <p class="text-gray-800 font-bold text-base md:text-lg mb-4 leading-relaxed">
+                        يجب عليك <span class="bg-gradient-to-r from-secondary to-yellow-500 text-primary px-3 py-1 rounded-lg shadow-md border border-yellow-400 font-black">تحميل كارت الحجز</span> الخاص بك أدناه والاحتفاظ به في مكان آمن.
+                    </p>
+                    <div class="bg-white p-4 md:p-5 rounded-xl border-r-4 border-primary text-right shadow-lg inline-block max-w-lg card-hover">
+                        <p class="text-gray-800 font-black text-sm md:text-base mb-3 border-b border-gray-200 pb-3">
+                            <i class="fas fa-info-circle text-primary ml-1"></i>
+                            لماذا هذا الكارت مهم؟
+                        </p>
+                        <ul class="list-none space-y-3 text-gray-700 font-semibold pr-2 mt-3">
+                            <li class="flex items-start gap-2 text-sm md:text-base"><i class="fas fa-check-circle text-green-500 mt-0.5"></i><span>مطلوب بشكل أساسي <strong class="text-primary border-b-2 border-primary/30 pb-0.5">لتأكيد حجزك</strong> النهائي ودخول المجموعة.</span></li>
+                            <li class="flex items-start gap-2 text-sm md:text-base"><i class="fas fa-key text-yellow-500 mt-0.5"></i><span>يحتوي على <strong class="text-red-600 border-b-2 border-red-200 pb-0.5">رقم الـ ID السري</strong> الخاص بك.</span></li>
+                            <li class="flex items-start gap-2 text-sm md:text-base"><i class="fas fa-edit text-blue-500 mt-0.5"></i><span>ستحتاجه لاحقاً إذا أردت <strong class="text-primary border-b-2 border-primary/30 pb-0.5">تعديل بياناتك أو مجموعتك</strong>.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional ID Card Container -->
+            <div id="card-wrapper" class="bg-transparent mb-8 flex justify-center w-full">
+                <!-- Wrapper for dom-to-image export -->
+                <div id="id-card-export" class="inline-block">
+                    
+                    <!-- The Professional Rectangular Card -->
+                    <div id="id-card" class="relative w-[340px] sm:w-[450px] md:w-[550px] rounded-xl text-white flex flex-col shadow-inner border border-[#FFD700]/30 overflow-hidden" dir="rtl" style="font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #1e3a8a 0%, #152966 100%);">
+                        
+                        <!-- Premium Background Decorations -->
+                        <div class="absolute -top-24 -right-24 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+                        <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-[#FFD700]/10 rounded-full blur-2xl"></div>
+                        <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+                        <!-- Card Header -->
+                        <div class="flex justify-end items-center gap-3 px-3 pt-3 pb-2 sm:px-5 sm:pt-4 sm:pb-3 md:px-6 md:pt-5 md:pb-3 border-b border-white/10 relative z-10">
+                            <!-- Title Area -->
+                            <div class="text-right flex-grow">
+                                <h2 class="text-lg sm:text-2xl md:text-3xl font-extrabold tracking-wide leading-tight text-white mb-0.5 drop-shadow-md">الأستاذ / إسلام سعود</h2>
+                                <p class="text-[#FFD700] text-[10px] sm:text-[12px] md:text-[14px] font-bold tracking-wider drop-shadow">كارت حجز العام الدراسي 2026-2027</p>
+                            </div>
+                            <!-- Graduation Cap + Globe Icon -->
+                            <div class="flex-shrink-0 flex items-center justify-center" style="width:70px;height:70px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:100%;height:100%;">
+                                    <defs>
+                                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#FFD700"/>
+                                            <stop offset="30%" style="stop-color:#FFF176"/>
+                                            <stop offset="50%" style="stop-color:#FFD700"/>
+                                            <stop offset="75%" style="stop-color:#FFA000"/>
+                                            <stop offset="100%" style="stop-color:#FFD700"/>
+                                        </linearGradient>
+                                        <linearGradient id="goldGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#FFF176"/>
+                                            <stop offset="50%" style="stop-color:#FFD700"/>
+                                            <stop offset="100%" style="stop-color:#B8860B"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <!-- Globe -->
+                                    <circle cx="256" cy="310" r="130" fill="none" stroke="url(#goldGrad)" stroke-width="18"/>
+                                    <ellipse cx="256" cy="310" rx="60" ry="130" fill="none" stroke="url(#goldGrad)" stroke-width="12"/>
+                                    <line x1="126" y1="310" x2="386" y2="310" stroke="url(#goldGrad)" stroke-width="12"/>
+                                    <path d="M148 260 Q256 240 364 260" fill="none" stroke="url(#goldGrad)" stroke-width="10"/>
+                                    <path d="M148 360 Q256 380 364 360" fill="none" stroke="url(#goldGrad)" stroke-width="10"/>
+                                    <!-- Cap base -->
+                                    <path d="M140 200 L256 160 L372 200 L340 220 L256 190 L172 220 Z" fill="url(#goldGrad2)"/>
+                                    <!-- Cap top (flat diamond) -->
+                                    <path d="M110 195 L256 130 L402 195 L256 220 Z" fill="url(#goldGrad)"/>
+                                    <!-- Tassel line -->
+                                    <line x1="380" y1="195" x2="420" y2="280" stroke="#FFD700" stroke-width="5" stroke-linecap="round"/>
+                                    <!-- Tassel end -->
+                                    <circle cx="420" cy="285" r="8" fill="#FFD700"/>
+                                    <path d="M414 293 L420 320 L426 293" fill="#FFD700"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Card Body (Data Rows) -->
+                        <div class="flex-grow flex flex-col justify-center px-3 sm:px-5 md:px-6 space-y-1.5 sm:space-y-2.5 md:space-y-3 relative z-10">
+                            
+                            <!-- Row 1: Name -->
+                            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                                <div class="w-4 sm:w-5 flex justify-center flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-[#FFD700] drop-shadow"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
+                                </div>
+                                <div class="px-1.5 sm:px-2.5 bg-[#FFD700] text-[#1e3a8a] text-center font-black py-0.5 rounded text-[10px] sm:text-[12px] md:text-[14px] shadow-sm flex-shrink-0 whitespace-nowrap">الاسم:</div>
+                                <div id="cardName" class="text-[12px] sm:text-[15px] md:text-lg font-bold text-white truncate drop-shadow-sm"></div>
+                            </div>
+                            
+                            <!-- Row 2: Grade -->
+                            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                                <div class="w-4 sm:w-5 flex justify-center flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-[#FFD700] drop-shadow"><path d="M32 48C32 21.5 53.5 0 80 0s48 21.5 48 48V464c0 26.5-21.5 48-48 48s-48-21.5-48-48V48zm288 0c0-26.5 21.5-48 48-48s48 21.5 48 48V464c0 26.5-21.5 48-48 48s-48-21.5-48-48V48zm192-48c0-26.5 21.5-48 48-48s48 21.5 48 48V464c0 26.5-21.5 48-48 48s-48-21.5-48-48V48z"/></svg>
+                                </div>
+                                <div class="px-1.5 sm:px-2.5 bg-[#FFD700] text-[#1e3a8a] text-center font-black py-0.5 rounded text-[10px] sm:text-[12px] md:text-[14px] shadow-sm flex-shrink-0 whitespace-nowrap">الصف:</div>
+                                <div id="cardGrade" class="text-[12px] sm:text-[15px] md:text-lg font-bold text-white truncate drop-shadow-sm"></div>
+                            </div>
+                            
+                            <!-- Row 3: Group -->
+                            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                                <div class="w-4 sm:w-5 flex justify-center flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-[#FFD700] drop-shadow"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>
+                                </div>
+                                <div class="px-1.5 sm:px-2.5 bg-[#FFD700] text-[#1e3a8a] text-center font-black py-0.5 rounded text-[10px] sm:text-[12px] md:text-[14px] shadow-sm flex-shrink-0 whitespace-nowrap">المجموعة:</div>
+                                <div id="cardGroup" class="text-[12px] sm:text-[15px] md:text-lg font-bold text-white truncate drop-shadow-sm"></div>
+                            </div>
+
+                            <!-- Row 4: بداية الحجز -->
+                            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                                <div class="w-4 sm:w-5 flex justify-center flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-[#FFD700] drop-shadow"><path d="M12 192l-12 0c-6.6 0-12 5.4-12 12v260c0 26.5 21.5 48 48 48H396c26.5 0 48-21.5 48-48V204c0-6.6-5.4-12-12-12h-12c-6.6 0-12 5.4-12 12v260H36V204c0-6.6-5.4-12-12-12zM400 0H48C21.5 0 0 21.5 0 48V160H448V48C448 21.5 426.5 0 400 0zM448 192H0V96H448v96z"/></svg>
+                                </div>
+                                <div class="px-1.5 sm:px-2.5 bg-[#FFD700] text-[#1e3a8a] text-center font-black py-0.5 rounded text-[10px] sm:text-[12px] md:text-[14px] shadow-sm flex-shrink-0 whitespace-nowrap">البداية:</div>
+                                <div class="text-[12px] sm:text-[15px] md:text-lg font-bold text-white drop-shadow-sm">1 أغسطس 2026</div>
+                            </div>
+
+                            <!-- Row 5: Parent's Phone -->
+                            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                                <div class="w-4 sm:w-5 flex justify-center flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-[#FFD700] drop-shadow"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
+                                </div>
+                                <div class="px-1.5 sm:px-2.5 bg-[#FFD700] text-[#1e3a8a] text-center font-black py-0.5 rounded text-[10px] sm:text-[12px] md:text-[14px] shadow-sm flex-shrink-0 whitespace-nowrap">هاتف ولي الأمر:</div>
+                                <div id="cardPhone" class="text-[12px] sm:text-[15px] md:text-lg font-bold text-white tracking-widest drop-shadow-sm" dir="ltr"></div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="px-3 sm:px-5 md:px-6 pb-2.5 pt-2 sm:pb-3 sm:pt-2.5 md:pb-4 md:pt-3 border-t border-white/10 flex justify-between items-center relative z-10 w-full bg-black/15 rounded-b-xl">
+                            
+                            <!-- Right: ID -->
+                            <div class="flex-shrink-0">
+                                <span class="text-[11px] sm:text-[13px] md:text-[15px] text-gray-200 font-mono font-bold tracking-widest leading-none drop-shadow-sm" dir="ltr">ID: <span id="cardId" class="text-white"></span></span>
+                            </div>
+
+                            <!-- Center: Contact Info -->
+                            <div class="text-center flex-grow px-2">
+                                <span class="block text-[9px] sm:text-[10px] md:text-[12px] text-gray-300 font-bold mb-0.5">للتواصل والاستفسار</span>
+                                <div class="flex items-center justify-center gap-1.5 text-[#FFD700] font-black text-[13px] sm:text-[15px] md:text-[17px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 fill-[#FFD700]"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+                                    <span dir="ltr" class="tracking-wider">01228466613</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Left: Status Box -->
+                            <div class="bg-blue-900/60 px-1.5 sm:px-2.5 md:px-3.5 py-0.5 sm:py-1 rounded-full flex items-center gap-1 flex-shrink-0 border border-blue-400/30 backdrop-blur-sm shadow-inner">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 fill-[#4ade80] drop-shadow"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                                <span class="text-[9px] sm:text-[10px] md:text-[12px] font-bold text-white pt-0.5">تم الحجز</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 md:gap-4 w-full max-w-md mt-6 justify-center fade-in-up delay-2">
+                <button onclick="downloadCard()" id="downloadBtn" class="btn-gold-custom flex-1 text-gray-900 font-bold py-3 md:py-4 px-4 md:px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm md:text-base">
+                    <i class="fas fa-download text-lg"></i>
+                    <span>تحميل الكارت (صورة)</span>
+                </button>
+                <button onclick="backToWelcome()" class="btn-outline-custom flex-1 text-primary font-bold py-3 md:py-4 px-4 md:px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm md:text-base">
+                    <i class="fas fa-home text-lg"></i>
+                    <span>العودة للرئيسية</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Data for Groups based on Grades
+        const groupsData = {
+            "الأول الإعدادي": [
+                {name: "السبت والاثنين والاربعاء - 2 م", gender: "بنين"},
+                {name: "السبت والاثنين والاربعاء - 5 م", gender: "بنات"},
+                {name: "الأحد والثلاثاء والخميس - 4 م", gender: "مشتركة"}
+            ],
+            "الثاني الإعدادي": [
+                {name: "السبت والاثنين والاربعاء - 2 م", gender: "بنين"},
+                {name: "السبت والاثنين والاربعاء - 5 م", gender: "بنات"},
+                {name: "السبت والاثنين والاربعاء - 5 م", gender: "مشتركة"}
+            ],
+            "الثالث الإعدادي": [
+                {name: "الأحد والثلاثاء والخميس - 1 م", gender: "بنين"},
+                {name: "الأحد والثلاثاء والخميس - 2 م", gender: "بنات"},
+                {name: "الأحد والثلاثاء والخميس - 3 م", gender: "مشتركة"}
+            ],
+            "الأول الثانوي": [
+                {name: "الأحد والثلاثاء والخميس - 5 م", gender: "مشتركة"},
+                {name: "الأحد والثلاثاء والخميس - 6 م", gender: "مشتركة"}
+            ],
+            "الثاني الثانوي (بكالوريا)": [
+                {name: "السبت والاثنين والاربعاء - 12 م", gender: "مشتركة"},
+                {name: "الأحد والثلاثاء والخميس - 11 ص", gender: "مشتركة"}
+            ]
+        };
+
+        let currentMode = 'register'; // Track state: 'register' or 'update'
+
+        // Convert Arabic Numerals to English
+        function convertArabicNumerals(input) {
+            const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            let text = input.value;
+            for (let i = 0; i < 10; i++) {
+                let regex = new RegExp(arabicNumbers[i], 'g');
+                text = text.replace(regex, i);
+            }
+            input.value = text.replace(/[^0-9]/g, '');
+        }
+
+        // Check capacity for a specific group
+        function checkCapacity(grade, group) {
+            const scriptUrl = document.getElementById('scriptUrl').value;
+            const callbackName = 'capCheck_' + Math.round(100000 * Math.random());
+            const url = `${scriptUrl}?action=check_capacity&grade=${encodeURIComponent(grade)}&group=${encodeURIComponent(group)}&callback=${callbackName}`;
+            
+            return new Promise((resolve, reject) => {
+                window[callbackName] = function(response) {
+                    delete window[callbackName];
+                    const el = document.getElementById('jsonp-' + callbackName);
+                    if (el) el.remove();
+                    resolve(response);
+                };
+                const script = document.createElement('script');
+                script.id = 'jsonp-' + callbackName;
+                script.src = url;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    reject(new Error('Failed to check capacity'));
+                };
+                document.body.appendChild(script);
+            });
+        }
+
+        // Get all groups with their current capacity
+        function getGroupsWithCapacity(grade) {
+            const scriptUrl = document.getElementById('scriptUrl').value;
+            const callbackName = 'groupsCap_' + Math.round(100000 * Math.random());
+            const url = `${scriptUrl}?action=get_groups_capacity&grade=${encodeURIComponent(grade)}&callback=${callbackName}`;
+            
+            return new Promise((resolve, reject) => {
+                window[callbackName] = function(response) {
+                    delete window[callbackName];
+                    const el = document.getElementById('jsonp-' + callbackName);
+                    if (el) el.remove();
+                    resolve(response);
+                };
+                const script = document.createElement('script');
+                script.id = 'jsonp-' + callbackName;
+                script.src = url;
+                script.onerror = function() {
+                    delete window[callbackName];
+                    reject(new Error('Failed to get groups capacity'));
+                };
+                document.body.appendChild(script);
+            });
+        }
+
+        // Update group options when grade changes (simple - no numbers)
+        function updateGroups(selectedValue = null) {
+            const gradeSelect = document.getElementById('grade');
+            const genderSelect = document.getElementById('gender');
+            const groupSelect = document.getElementById('group');
+            const selectedGrade = gradeSelect.value;
+            const selectedGender = genderSelect ? genderSelect.value : '';
+
+            groupSelect.innerHTML = '<option value="" disabled selected>اختر المجموعة...</option>';
+            
+            if (selectedGrade && groupsData[selectedGrade]) {
+                const filtered = groupsData[selectedGrade].filter(function(g) {
+                    if (!selectedGender || selectedGender === '') return true;
+                    if (g.gender === 'مشتركة') return true;
+                    return g.gender === selectedGender;
+                });
+                filtered.forEach(function(group) {
+                    const option = document.createElement('option');
+                    option.value = group.name;
+                    option.textContent = group.name;
+                    groupSelect.appendChild(option);
+                });
+                groupSelect.disabled = false;
+                groupSelect.classList.remove('bg-gray-100', 'text-gray-500');
+                groupSelect.classList.add('bg-white', 'text-gray-800');
+                
+                if (selectedValue) {
+                    groupSelect.value = selectedValue;
+                }
+            } else {
+                groupSelect.innerHTML = '<option value="" disabled selected>يرجى اختيار المرحلة أولاً...</option>';
+                groupSelect.disabled = true;
+                groupSelect.classList.add('bg-gray-100', 'text-gray-500');
+                groupSelect.classList.remove('bg-white', 'text-gray-800');
+            }
+        }
+
+        // Navigation Functions
+        function startRegistration() {
+            currentMode = 'register';
+            document.getElementById('formTitle').innerHTML = '<i class="fas fa-user-plus"></i> بيانات الطالب (حجز جديد)';
+            document.getElementById('submitBtnText').textContent = 'تأكيد الحجز وتوليد الكارت';
+            document.getElementById('cancelReservationBtn').classList.add('hidden');
+            
+            document.getElementById('registrationForm').reset();
+            updateGroups(); 
+            
+            hideAllSections();
+            document.getElementById('form-section').classList.remove('hidden');
+        }
+
+        function openLoginSection() {
+            hideAllSections();
+            document.getElementById('loginForm').reset();
+            document.getElementById('login-section').classList.remove('hidden');
+        }
+
+        function backToWelcome() {
+            hideAllSections();
+            document.getElementById('welcome-section').classList.remove('hidden');
+        }
+
+        function hideAllSections() {
+            document.getElementById('welcome-section').classList.add('hidden');
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('form-section').classList.add('hidden');
+            document.getElementById('success-section').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Handle Login (Fetching data via fetch API)
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('loginId').value;
+            const phone = document.getElementById('loginPhone').value;
+            const scriptUrl = document.getElementById('scriptUrl').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            if (!scriptUrl) {
+                Swal.fire('خطأ', 'يرجى وضع رابط سكربت جوجل أولاً', 'error');
+                return;
+            }
+
+            const originalBtnHtml = loginBtn.innerHTML;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري البحث...';
+            loginBtn.disabled = true;
+
+            const fetchUrl = scriptUrl + '?action=fetch&id=' + encodeURIComponent(id) + '&phone=' + encodeURIComponent(phone);
+
+            fetch(fetchUrl, { redirect: 'follow' })
+                .then(function(resp) { return resp.text(); })
+                .then(function(text) {
+                    try {
+                        var response = JSON.parse(text);
+                    } catch(parseErr) {
+                        throw new Error('Invalid response from server');
+                    }
+
+                    loginBtn.innerHTML = originalBtnHtml;
+                    loginBtn.disabled = false;
+
+                    if (response.status === 'success') {
+                        currentMode = 'update';
+                        document.getElementById('formTitle').innerHTML = '<i class="fas fa-user-edit"></i> تعديل بيانات الحجز';
+                        document.getElementById('submitBtnText').textContent = 'حفظ التعديلات وتحديث الكارت';
+                        document.getElementById('cancelReservationBtn').classList.remove('hidden');
+                        document.getElementById('editIdValue').value = response.data.id;
+                        document.getElementById('studentName').value = response.data.name;
+                        document.getElementById('parentPhone').value = response.data.phone;
+                        document.getElementById('gender').value = response.data.gender;
+                        document.getElementById('grade').value = response.data.grade;
+                        updateGroups(response.data.group);
+
+                        const statusDiv = document.getElementById('reservationStatus');
+                        const statusText = document.getElementById('reservationStatusText');
+                        statusDiv.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-yellow-100', 'text-yellow-700', 'bg-red-100', 'text-red-700');
+                        statusDiv.classList.add('bg-green-100', 'text-green-700');
+                        statusText.textContent = 'حالة الحجز: نشط - يمكنك التعديل';
+                        statusDiv.querySelector('i').className = 'fas fa-check-circle ml-1';
+
+                        hideAllSections();
+                        document.getElementById('form-section').classList.remove('hidden');
+
+                        Swal.fire({ icon: 'success', title: 'تم العثور على بياناتك', text: 'يمكنك الآن تعديل بياناتك أو مجموعتك.', timer: 2000, showConfirmButton: false });
+
+                    } else if (response.status === 'error' && response.message === 'canceled') {
+                        Swal.fire({ icon: 'warning', title: 'حجز ملغي', text: 'هذا الحجز تم إلغاؤه مسبقاً.', confirmButtonColor: '#1e3a8a' });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'غير موجود', text: 'تأكد من رقم الحجز (ID) ورقم الهاتف والمحاولة مرة أخرى.', confirmButtonColor: '#1e3a8a' });
+                    }
+                })
+                .catch(function(err) {
+                    loginBtn.innerHTML = originalBtnHtml;
+                    loginBtn.disabled = false;
+                    Swal.fire('خطأ بالاتصال', 'تأكد من اتصالك بالإنترنت ورابط السكربت. (' + err.message + ')', 'error');
+                });
+        });
+
+        // Handle Form Submission (Register / Update)
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('studentName').value;
+            const phone = document.getElementById('parentPhone').value;
+            const gender = document.getElementById('gender').value;
+            const grade = document.getElementById('grade').value;
+            const group = document.getElementById('group').value;
+            const scriptUrl = document.getElementById('scriptUrl').value;
+            
+            if(phone.length !== 11) {
+                Swal.fire('خطأ في الرقم', 'يجب أن يتكون رقم الهاتف من 11 رقماً.', 'error'); return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalBtnHtml = submitBtn.innerHTML;
+            
+            // Check capacity before registration (not for updates)
+            if (currentMode === 'register') {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>جاري التحقق...</span>';
+                submitBtn.disabled = true;
+                
+                try {
+                    const capResult = await checkCapacity(grade, group);
+                    if (capResult.status === 'full') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'العدد اكتمل',
+                            text: 'العدد اكتمل في هذه المجموعة، برجاء اختيار مجموعة بديلة.',
+                            confirmButtonColor: '#1e3a8a'
+                        });
+                        submitBtn.innerHTML = originalBtnHtml;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                } catch (err) {
+                    console.log('Capacity check failed:', err);
+                }
+            }
+
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>جاري معالجة البيانات...</span>';
+            submitBtn.disabled = true;
+
+            let finalId;
+            if (currentMode === 'register') {
+                finalId = Math.floor(10000 + Math.random() * 90000);
+            } else {
+                finalId = document.getElementById('editIdValue').value;
+            }
+
+            // Use form submission with hidden iframe (bypasses CORS issues)
+            var iframe = document.createElement('iframe');
+            iframe.name = 'submitFrame_' + Math.round(100000 * Math.random());
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = scriptUrl;
+            form.target = iframe.name;
+            form.style.display = 'none';
+
+            var formParams = {
+                'action': currentMode === 'register' ? 'register' : 'update'
+            };
+            formParams[currentMode === 'register' ? 'id' : 'editId'] = finalId;
+            formParams['studentName'] = name;
+            formParams['parentPhone'] = phone;
+            formParams['gender'] = gender;
+            formParams['grade'] = grade;
+            formParams['group'] = group;
+            for (var key in formParams) {
+                var input = document.createElement('input');
+                input.name = key;
+                input.value = formParams[key];
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+
+            // Wait and show success
+            setTimeout(function() {
+                form.remove();
+                iframe.remove();
+                submitBtn.innerHTML = originalBtnHtml;
+                submitBtn.disabled = false;
+                generateCard(name, grade, group, phone, finalId);
+            }, 2000);
+        });
+
+        // Handle Cancel Reservation
+        function cancelReservation() {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن تتمكن من التراجع عن إلغاء الحجز!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، قم بالإلغاء',
+                cancelButtonText: 'تراجع'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const scriptUrl = document.getElementById('scriptUrl').value;
+                    const finalId = document.getElementById('editIdValue').value;
+                    
+                    Swal.fire({title: 'جاري الإلغاء...', allowOutsideClick: false, didOpen: () => {Swal.showLoading()}});
+
+                    // Use form submission with hidden iframe
+                    var iframe = document.createElement('iframe');
+                    iframe.name = 'cancelFrame_' + Math.round(100000 * Math.random());
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = scriptUrl;
+                    form.target = iframe.name;
+                    form.style.display = 'none';
+
+                    var input1 = document.createElement('input');
+                    input1.name = 'action';
+                    input1.value = 'cancel';
+                    form.appendChild(input1);
+                    var input2 = document.createElement('input');
+                    input2.name = 'editId';
+                    input2.value = finalId;
+                    form.appendChild(input2);
+
+                    document.body.appendChild(form);
+                    form.submit();
+
+                    setTimeout(function() {
+                        form.remove();
+                        iframe.remove();
+                        Swal.fire('تم الإلغاء!', 'تم إلغاء حجزك بنجاح.', 'success').then(() => {
+                            backToWelcome();
+                        });
+                    }, 2000);
+                }
+            });
+        }
+
+        function generateCard(name, grade, group, phone, cardIdValue) {
+            document.getElementById('cardName').textContent = name;
+            document.getElementById('cardGrade').textContent = grade;
+            document.getElementById('cardGroup').textContent = group;
+            document.getElementById('cardPhone').textContent = phone;
+            document.getElementById('cardId').textContent = cardIdValue;
+
+            hideAllSections();
+            document.getElementById('success-section').classList.remove('hidden');
+        }
+
+        function downloadCard() {
+            const cardElement = document.getElementById('id-card-export');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const originalHtml = downloadBtn.innerHTML;
+            
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+            downloadBtn.disabled = true;
+
+            domtoimage.toPng(cardElement, { 
+                quality: 1.0, 
+                bgcolor: '#152966',
+                style: { transform: 'scale(1)', transformOrigin: 'top left', margin: '0', padding: '0', borderRadius: '0' }
+            })
+            .then(function (dataUrl) {
+                const link = document.createElement('a');
+                link.download = `كارت_حجز_${document.getElementById('cardName').textContent}.png`;
+                link.href = dataUrl;
+                link.click();
+            })
+            .catch(function (error) {
+                Swal.fire('خطأ', 'حدث خطأ أثناء حفظ الصورة. التقط لقطة شاشة (Screenshot) بدلاً من ذلك.', 'error');
+            })
+            .finally(function() {
+                downloadBtn.innerHTML = originalHtml;
+                downloadBtn.disabled = false;
+            });
+        }
+
+    </script>
+</body>
+</html>
