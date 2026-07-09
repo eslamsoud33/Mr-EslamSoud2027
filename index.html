@@ -493,6 +493,17 @@
                     </div>
                 </div>
 
+                <!-- Student Phone (Optional) -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-sm" for="studentPhone">رقم هاتف الطالب <span class="text-gray-400 font-normal">(اختياري)</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-primary"><i class="fas fa-mobile-alt"></i></span>
+                        <input type="tel" id="studentPhone" pattern="[0-9]{11}" maxlength="11" oninput="convertArabicNumerals(this)"
+                            class="input-modern w-full pl-4 pr-10 py-3 rounded-xl text-base"
+                            placeholder="مثال: 01012345678 (اختياري)" dir="ltr">
+                    </div>
+                </div>
+
                 <!-- Gender & Grade -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -688,6 +699,7 @@
                                 <div class="px-1.5 sm:px-2.5 bg-[#FFD700] text-[#1e3a8a] text-center font-black py-0.5 rounded text-[10px] sm:text-[12px] md:text-[14px] shadow-sm flex-shrink-0 whitespace-nowrap">هاتف ولي الأمر:</div>
                                 <div id="cardPhone" class="text-[12px] sm:text-[15px] md:text-lg font-bold text-white tracking-widest drop-shadow-sm" dir="ltr"></div>
                             </div>
+
                         </div>
 
                         <!-- Card Footer -->
@@ -1014,6 +1026,7 @@
                         document.getElementById('editIdValue').value = response.data.id;
                         document.getElementById('studentName').value = response.data.name;
                         document.getElementById('parentPhone').value = response.data.phone;
+                        document.getElementById('studentPhone').value = response.data.studentPhone || '';
                         document.getElementById('gender').value = response.data.gender;
                         document.getElementById('grade').value = response.data.grade;
                         updateGroups(response.data.group);
@@ -1098,6 +1111,7 @@
             
             const name = document.getElementById('studentName').value;
             const phone = document.getElementById('parentPhone').value;
+            const studentPhone = document.getElementById('studentPhone').value;
             const gender = document.getElementById('gender').value;
             const grade = document.getElementById('grade').value;
             const group = document.getElementById('group').value;
@@ -1160,6 +1174,7 @@
             formData.append(currentMode === 'register' ? 'id' : 'editId', finalId);
             formData.append('studentName', name);
             formData.append('parentPhone', phone);
+            formData.append('studentPhone', studentPhone);
             formData.append('gender', gender);
             formData.append('grade', grade);
             formData.append('group', group);
@@ -1177,7 +1192,7 @@
                 submitBtn.disabled = false;
 
                 if (response.result === 'success') {
-                    generateCard(name, grade, group, phone, finalId);
+                    generateCard(name, grade, group, phone, finalId, studentPhone);
                 } else {
                     Swal.fire({
                         icon: 'error',
@@ -1201,7 +1216,7 @@
                         submitBtn.disabled = false;
                         
                         if (response.status === 'success' && response.data.group === group) {
-                            generateCard(name, grade, group, phone, finalId);
+                            generateCard(name, grade, group, phone, finalId, studentPhone);
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -1215,7 +1230,7 @@
                         console.log('Verification fallback failed:', fallbackErr);
                         submitBtn.innerHTML = originalBtnHtml;
                         submitBtn.disabled = false;
-                        generateCard(name, grade, group, phone, finalId);
+                        generateCard(name, grade, group, phone, finalId, studentPhone);
                     }
                 }, 1500);
             }
@@ -1383,7 +1398,7 @@
             return `${day} ${date} أغسطس 2026`;
         }
 
-        function generateCard(name, grade, group, phone, cardIdValue) {
+        function generateCard(name, grade, group, phone, cardIdValue, studentPhone) {
             document.getElementById('cardName').textContent = name;
             document.getElementById('cardGrade').textContent = grade;
             document.getElementById('cardGroup').textContent = group;
