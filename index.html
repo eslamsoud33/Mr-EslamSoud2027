@@ -1207,7 +1207,7 @@
                                         <span class="font-bold text-amber-800">تنبيه مهم</span>
                                     </div>
                                     <p class="text-gray-700 text-sm leading-relaxed">
-                                       اسم الطالب <strong class="text-primary">${name}</strong> ورقم الهاتف موجودين مسبقاً في هذا الشيت.
+                                       اسم الطالب <strong class="text-primary">${name}</strong> ورقم الهاتف تم تسجيله مسبقاً.
                                     </p>
                                 </div>
                                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
@@ -1474,14 +1474,22 @@
 
         function downloadCard() {
             const cardElement = document.getElementById('id-card-export');
+            const card = document.getElementById('id-card');
             const downloadBtn = document.getElementById('downloadBtn');
             const originalHtml = downloadBtn.innerHTML;
             
             downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
             downloadBtn.disabled = true;
 
+            // Fix card width and font sizes for consistent export on all devices
+            const originalWidth = card.style.width;
+            const originalTransform = card.style.transform;
+            card.style.width = '550px';
+            card.style.transform = 'scale(1)';
+
             htmlToImage.toPng(cardElement, {
-                pixelRatio: 3, // For high quality rendering
+                pixelRatio: 3,
+                width: 550,
                 style: {
                     transform: 'scale(1)',
                     transformOrigin: 'top left'
@@ -1498,6 +1506,9 @@
                 Swal.fire('خطأ', 'حدث خطأ أثناء حفظ الصورة. التقط لقطة شاشة (Screenshot) بدلاً من ذلك.', 'error');
             })
             .finally(function() {
+                // Restore original card styles
+                card.style.width = originalWidth;
+                card.style.transform = originalTransform;
                 downloadBtn.innerHTML = originalHtml;
                 downloadBtn.disabled = false;
             });
