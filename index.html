@@ -1193,6 +1193,14 @@
 
                 if (response.result === 'success') {
                     generateCard(name, grade, group, phone, finalId, studentPhone);
+                } else if (response.message === 'duplicate') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'الطالب مسجل بالفعل',
+                        html: '<div class="text-right"><p>اسم الطالب ورقم الهاتف موجودين مسبقاً في هذا الشيت.</p><p class="mt-2 font-bold">لو عايز تغير المجموعة، ادخل على <strong>تعديل / إلغاء الحجز</strong> وغيّر المجموعة من هناك.</p></div>',
+                        confirmButtonColor: '#1e3a8a',
+                        confirmButtonText: 'حسناً'
+                    });
                 } else {
                     Swal.fire({
                         icon: 'error',
